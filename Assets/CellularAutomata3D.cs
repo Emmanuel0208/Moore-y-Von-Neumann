@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CellularAutomata3D : MonoBehaviour
 {
     // Variables públicas para ser ajustadas en el Inspector
-    public Vector3Int gridSize; // Tamaño de la grilla en 3D
+    public Vector3Int gridSize; // Tamaño del grid en 3D
     public float cubeSize = 1f; // Tamaño de cada cubo
     public Material cubeMaterial; // Material del cubo
     public Transform cubesParent; // Objeto padre que contendrá todos los cubos
@@ -29,16 +29,16 @@ public class CellularAutomata3D : MonoBehaviour
     public TMP_InputField inputSurviveThreshold;
     public TMP_InputField inputDyingThreshold;
     public TMP_Dropdown dropdownNeighborMethod;
-    public Toggle centerOnlyToggle; // Toggle para definir si solo los cubos del centro se activan
+    public Toggle centerOnlyToggle; 
     public Button playButton;
 
-    private GameObject[,,] cubes; // Array tridimensional de GameObjects para los cubos
-    private int[,,] states; // Array tridimensional para almacenar los estados de los cubos (0: muerto, 1: vivo, 2: muriendo)
-    private int[,,] lifeTimes; // Array tridimensional para almacenar los tiempos de vida de cada cubo en el estado de muriendo
+    private GameObject[,,] cubes; // Array  para los cubos
+    private int[,,] states; // Array para estados de los cubos (0: muerto, 1: vivo, 2: muriendo)
+    private int[,,] lifeTimes; // Array para los cubos que estan muriendo
     private float timer;
     private bool isSimulationRunning = false;
 
-    // Enumeración para los métodos de vecinos
+    // Enum
     public enum NeighborMethod
     {
         Moore,
@@ -63,7 +63,7 @@ public class CellularAutomata3D : MonoBehaviour
         states = new int[gridSize.x, gridSize.y, gridSize.z]; // Inicializa el array de estados
         lifeTimes = new int[gridSize.x, gridSize.y, gridSize.z]; // Inicializa el array de tiempos de vida
 
-        // Calcular el centro de la grilla y ajustar la posición en base a la distancia de alejamiento
+        // Calcular el centro del grid y ajustar la posición en base a la distancia de alejamiento
         Vector3 gridCenter = new Vector3((gridSize.x - 1) * cubeSize / 2, (gridSize.y - 1) * cubeSize / 2, (gridSize.z - 1) * cubeSize / 2);
         Vector3 offset = mainCamera.transform.forward * distanceFromCamera; // Calcula el offset para alejar la grilla
 
@@ -107,7 +107,7 @@ public class CellularAutomata3D : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
 
-        meshFilter.mesh = mesh; // Asigna la malla al cubo
+        meshFilter.mesh = mesh; // Asigna la  al cubo
         return cube;
     }
 
@@ -137,7 +137,7 @@ public class CellularAutomata3D : MonoBehaviour
                 {
                     for (int z = centerZ - 1; z <= centerZ + 1; z++)
                     {
-                        if (Random.value < 0.3f) // 30% de probabilidad de estar vivo
+                        if (Random.value < 0.3f) // probabilidad de estar vivo
                         {
                             cubes[x, y, z].SetActive(true);
                             states[x, y, z] = 1;
@@ -157,7 +157,7 @@ public class CellularAutomata3D : MonoBehaviour
                 {
                     for (int z = 0; z < gridSize.z; z++)
                     {
-                        if (Random.value < 0.3f) // 30% de probabilidad de estar vivo
+                        if (Random.value < 0.3f) // probabilidad de estar vivo
                         {
                             cubes[x, y, z].SetActive(true);
                             states[x, y, z] = 1;
@@ -174,7 +174,7 @@ public class CellularAutomata3D : MonoBehaviour
     {
         if (isSimulationRunning)
         {
-            timer -= Time.deltaTime; // Decrementa el temporizador
+            timer -= Time.deltaTime; // reduce el temporizador
             if (timer <= 0f)
             {
                 UpdateCubes(); // Actualiza los cubos cuando el temporizador llega a 0
@@ -258,7 +258,7 @@ public class CellularAutomata3D : MonoBehaviour
         }
     }
 
-    // Método para contar vecinos vivos usando el método de Moore
+    // Método Moore
     int CountAliveNeighborsMoore(int x, int y, int z)
     {
         int aliveCount = 0;
@@ -287,7 +287,7 @@ public class CellularAutomata3D : MonoBehaviour
         return aliveCount;
     }
 
-    // Método para contar vecinos vivos usando el método de Von Neumann
+    // Método Von Neumann
     int CountAliveNeighborsVonNeumann(int x, int y, int z)
     {
         int aliveCount = 0;
